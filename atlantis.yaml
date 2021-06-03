@@ -1,0 +1,26 @@
+version: 3
+automerge: true
+delete_source_branch_on_merge: true
+projects:
+- name: my-project-name
+  dir: .
+  workspace: default
+  terraform_version: v0.15.4
+  delete_source_branch_on_merge: true
+  autoplan:
+    when_modified: ["*.tf", "../modules/**.tf"]
+    enabled: true
+  apply_requirements: [mergeable, approved]
+  workflow: myworkflow
+workflows:
+  myworkflow:
+    plan:
+      steps:
+      - run: terraform workspace select stage, prod $WORKSPACE
+      - init
+      - plan:
+          extra_args: ["-lock=false"]
+    apply:
+      steps:
+      - run: terraform apply stage, prod $PLANFILE
+      - apply

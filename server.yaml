@@ -1,0 +1,4 @@
+repos:
+- id: github.com/Kostromin-Mixa
+  apply_requirements: [approved, mergeable]
+  
